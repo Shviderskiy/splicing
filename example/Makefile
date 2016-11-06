@@ -29,7 +29,7 @@ run: foo lib
 
 ../objects/init.o: init.cpp ../sources/lib.hpp
 	@ mkdir -p ../objects
-	$(CXX) $(CXX_FLAGS) -fPIC -D _LIB_NAME=\"./lib.so\" -c init.cpp -o ../objects/init.o
+	$(CXX) $(CXX_FLAGS) -fPIC -c init.cpp -o ../objects/init.o
 
 lib.so: ../objects/lib.o ../objects/init.o
 	$(LD) $(LD_FLAGS) -shared ../objects/lib.o ../objects/init.o -o lib.so

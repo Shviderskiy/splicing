@@ -35,8 +35,8 @@ namespace splicing {
     Status set_hook(_Address target, _Function hook) {
 
         return set_hook(
-                    reinterpret_cast<Address>(target),
-                    reinterpret_cast<Address>(hook));
+            *reinterpret_cast<Address*>(&target),
+            *reinterpret_cast<Address*>(&hook));
     }
 
 

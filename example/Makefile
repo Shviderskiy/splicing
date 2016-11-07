@@ -1,8 +1,8 @@
-CXX = g++-6
-LD  = g++-6
+CXX = g++-5
+LD  = g++-5
 
 WARNINGS = -Wall -Weffc++ -Wextra -pedantic
-CXX_FLAGS = -std=c++11 $(WARNINGS) # -m32 
+CXX_FLAGS = -std=c++11 -masm=intel $(WARNINGS) # -m32 
 LD_FLAGS  = # -m32
 
 

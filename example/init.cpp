@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 
-static void* bar_address = reinterpret_cast<void*>(0x4005b6);
+static void* bar_address = reinterpret_cast<void*>(0x80484fd);
 
 
 // hook for bar
@@ -35,6 +35,7 @@ void splicing::init() {
     ::printf("-> splicing::init [library]\n");
     ::printf("   &my_bar = %p\n", reinterpret_cast<void*>(my_bar));
 
+    // covering its tracks
     ::unsetenv("LD_PRELOAD");
 
     splicing::Status status =

@@ -1,5 +1,5 @@
-CXX = g++-5
-LD  = g++-5
+CXX = g++
+LD  = g++
 
 WARNINGS = -Wall -Weffc++ -Wextra -pedantic
 CXX_FLAGS = -std=c++11 -masm=intel $(WARNINGS) # -m32 

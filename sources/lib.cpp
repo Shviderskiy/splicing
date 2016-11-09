@@ -73,7 +73,7 @@ namespace splicing {
 
             ::memcpy(this->data, other.data, sizeof(this->data));
         }
-        
+
         Backup& operator =(Backup const &other) {
 
             ::memcpy(this->data, other.data, sizeof(this->data));
@@ -99,7 +99,7 @@ namespace splicing {
             uintptr_t(address) & ~(pageSize - 1));
         int prot = PROT_READ | PROT_WRITE | PROT_EXEC;
 
-        if (mprotect(page, pageSize, prot) != 0)
+        if (::mprotect(page, pageSize, prot) != 0)
             return Status::error;
 
         return Status::success;

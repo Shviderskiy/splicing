@@ -18,4 +18,4 @@
 Подобную логику предлагается реализовать самостоятельно.
 
 
-### [Usage example](https://github.com/Shviderskiy/splicing/blob/master/example/README.md)
+### [Usage example](https://github.com/Shviderskiy/splicing/tree/master/example#build)

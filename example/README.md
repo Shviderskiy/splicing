@@ -1,24 +1,28 @@
 ### Build
 
+Подготовка к сборке.
+
+	user:~# git clone https://github.com/Shviderskiy/splicing.git ~/splicing
+	user:~# cd ~/splicing/example
+
+
 Сборка тестового исполняемого файла.
  
-	user:~/example$ make foo
+	user:~/splicing/example$ make foo
 
 
 Сборка тестовой библиотеки для перехвата.
  
-	user:~/example$ make lib
+	user:~/splicing/example$ make lib
 
 
 Запуск исполняемого файла с библиотекой перехвата.
  
-	user:~/example$ make run
+	user:~/splicing/example$ make run
+
+> *Запуск может произойти некорректно! См. Usage.*
 
 ### Usage
-<!-- 
-Необходимо реализовать функцию splicing::init().
-Именно в ней должна осуществляться устновка хуков.
--->
 
 Для примера будем перехватывать функцию `bar` из `foo.cpp`.
 
@@ -33,11 +37,11 @@
 
 Откомпилируем файл `foo.cpp`
 
-	user:~/example$ make foo
+	user:~/splicing/example$ make foo
 
 и запустим чтобы посмотреть адрес функции `bar`.
 
-	user:~/example$ ./foo
+	user:~/splicing/example$ ./foo
 	-> main [executable]
    	   LD_PRELOAD not found
        &bar = 0x80484fd
@@ -54,19 +58,19 @@
 	int result = bar(100500);
 
 
-Теперь укажем в файле `init.cpp` что нас интересует адрес `0x80484fd`.
+Теперь укажем в файле `init.cpp`, что нас интересует адрес `0x80484fd`.
 
 	static void* bar_address = 
 	    reinterpret_cast<void*>(0x80484fd);
 
 
-Установка хука происходит в функции `splicing::init()`.
+Код, отвечающий за установку хука, находится в функции `splicing::init()`.
 
 	splicing::set_hook(::bar_address, my_bar);
 
 Теперь при вызове оригинальной функции `bar` из файла `foo` управление будет передано на определенную нами функцию `my_bar`. 
 
-Обе функции `bar` и `my_bar` имеют одинаковую сигнатуру, и, для простоты примера, сборка происходит с одними и теми-же флагами.
+Обе функции `bar` и `my_bar` имеют одинаковую сигнатуру, и, для простоты примера, сборка происходит с одними и теми-же флагами, а значит их прологи не будут отличаться.
 
 > *Обработчиком хука не обязательно должна быть функция. Существует возможность передать управление по произвольному адресу, например на ассемблерную вставку. Но не стоит забывать, что в этом случае, следить за сохранностью стека придется самостоятельно.*
 
@@ -86,8 +90,8 @@
 
 Для того чтобы увидеть результат нужно собрать библиотеку и запустить исполняемый файл с `LD_PRELOAD`.
 
-	user:~/example$ make lib
-	user:~/example$ make run # LD_PRELOAD=./lib.so ./foo
+	user:~/splicing/example$ make lib
+	user:~/splicing/example$ make run # LD_PRELOAD=./lib.so ./foo
 	-> splicing::init [library]
    	   &my_bar = 0xb770b8dd
 	-> main [executable]

@@ -20,7 +20,7 @@ int my_bar(int param) {
 
     if (origin_bar == nullptr) {
 
-        ::fprintf(stderr, "can't restore %p\n", bar_address);
+        ::fprintf(stderr, "splicing: can't restore %p\n", bar_address);
         ::exit(-1);
     }
 
@@ -43,7 +43,7 @@ void splicing::init() {
 
     if (status == splicing::Status::error) {
 
-        ::fprintf(stderr, "can't set_hook to %p\n", bar_address);
+        ::fprintf(stderr, "splicing: can't set_hook to %p\n", bar_address);
         ::exit(-1);
     }
 }

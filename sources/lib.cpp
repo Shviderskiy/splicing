@@ -106,9 +106,28 @@ namespace splicing {
     }
 
 
+    static bool isInsertPossible(Address target) {
+
+        auto iter = core.backups.cbegin();
+        for ( ; iter != core.backups.cend(); ++iter) {
+
+            Address current = iter->first;
+
+            Address max = (current > target) ? current : target;
+            Address min = (current < target) ? current : target;
+
+            // wrong hook distance
+            if (uintptr_t(max) - uintptr_t(min) < sizeof(Jump::code))
+                return false;
+        }
+
+        return true;
+    }
+
+
     Status set_hook(Address target, Address hook) {
 
-        if (core.backups.find(target) != core.backups.cend())
+        if (!isInsertPossible(target))
             return Status::error;
 
         if (enableRwx(target) != Status::success)

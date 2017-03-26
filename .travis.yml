@@ -12,8 +12,17 @@ before_script:
 
 script:
   - echo "script begin"
-  - CONFIGURATION=debug make
+  - COMPILER=g++-4.8 CONFIGURATION=debug make
   - ./tests
   - make clean
   - echo "script end"
   - uname -a
+  - gcc -v
+  - clang -v
+
+addons:
+  apt:
+    packages:
+    - gcc-4.8
+    - g++-4.8
+    - clang

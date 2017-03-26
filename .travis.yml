@@ -2,15 +2,18 @@ language: cpp
 
 compiler:
   - gcc
+  - clang
 
 os:
   - linux
 
-before_install:
-  - echo "before_install"
-
 before_script:
-  - echo "before_script"
+  - cd tests
 
 script:
-  - echo "script"
+  - echo "script begin"
+  - CONFIGURATION=debug make
+  - ./tests
+  - make clean
+  - echo "script end"
+  - uname -a

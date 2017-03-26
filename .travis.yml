@@ -17,10 +17,10 @@ before_script:
   - cd tests
 
 script:
-  - echo "script begin"
-  - COMPILER=g++-4.8 CONFIGURATION=debug make
+  - COMPILER=g++-4.8 CONFIGURATION=release ARCHITECTURE=amd64 make
   - ./tests
   - make clean
-  - echo "script end"
-  - uname -a
-  - g++ -v
+  - COMPILER=g++-4.8 CONFIGURATION=release ARCHITECTURE=x86 make
+  - ./tests
+  - make clean
+

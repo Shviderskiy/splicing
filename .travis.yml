@@ -1,11 +1,17 @@
 language: cpp
 
 compiler:
-  - gcc
-  - clang
+  - g++
 
 os:
   - linux
+
+before_install:
+- sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+- sudo apt-get update -qq
+
+install:
+- sudo apt-get install -qq g++-4.8
 
 before_script:
   - cd tests
@@ -17,12 +23,4 @@ script:
   - make clean
   - echo "script end"
   - uname -a
-  - gcc -v
-  - clang -v
-
-addons:
-  apt:
-    packages:
-    - gcc-4.8
-    - g++-4.8
-    - clang
+  - g++ -v

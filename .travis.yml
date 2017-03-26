@@ -23,4 +23,3 @@ script:
   - COMPILER=g++-4.8 CONFIGURATION=release ARCHITECTURE=x86 make
   - ./tests
   - make clean
-

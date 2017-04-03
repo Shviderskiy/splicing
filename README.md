@@ -15,3 +15,8 @@ Implementation technique of hooking in user space.
 
 ### Build system:
 * only for Linux
+
+### Compilers:
+* gcc
+* clang
+* mingw

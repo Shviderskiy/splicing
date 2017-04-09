@@ -102,7 +102,6 @@ namespace splicing {
 
     void Api::restore(void *target) {
 
-
         if (std::error_code errorCode = this->tryRestore(target))
             throw std::system_error(errorCode);
     }

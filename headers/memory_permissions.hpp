@@ -57,7 +57,6 @@ namespace splicing {
             void *address, size_t size,
             bitfield_t mp, bitfield_t &old = _unused);
 
-
 } // namespace splicing
 
 #endif // _SPLICING_MEMORY_PERMISSIONS_HPP

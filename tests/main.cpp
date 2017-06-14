@@ -4,6 +4,7 @@
 
 #include <mutex>
 
+#include "tools/static_initialization.hpp"
 #include "tools/endian.hpp"
 #include "tools/spin_lock.hpp"
 
@@ -16,6 +17,21 @@ namespace tools {
 
 
     namespace tests {
+
+
+        static bool isStaticInitilizationBlockExecuted = false;
+
+
+        _STATIC_INITIALIZATION_BLOCK {
+
+            isStaticInitilizationBlockExecuted = true;
+        };
+
+
+        void staticInitialization() {
+
+            assert(isStaticInitilizationBlockExecuted);
+        }
 
 
         void swapBytes() {
@@ -181,6 +197,7 @@ namespace splicing {
 
 int main() {
 
+    tools::tests::staticInitialization();
     tools::tests::swapBytes();
     tools::tests::spinLock();
 

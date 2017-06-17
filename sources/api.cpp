@@ -1,5 +1,6 @@
 #include "api.hpp"
 
+#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -31,6 +32,12 @@ namespace splicing {
 
         virtual void setHook(void *target, void *hook) override;
         virtual void restore(void *target) override;
+
+        virtual std::error_code
+        trySetHookUnsafe(void *target, void *hook,
+                         void *backup = nullptr) _NOEXCEPT override;
+        virtual std::error_code
+        tryRestoreUnsafe(void *target, void *backup) _NOEXCEPT override;
 
         typedef std::unordered_map<void*, uint8_t[sizeof(Jump)]> SavedRegions;
 
@@ -81,7 +88,7 @@ namespace splicing {
         if (setMemoryPermissions(target, sizeof(Jump), _MP_RWX, oldMp))
             return makeErrorCode(Error::invalidAddress);
 
-        memcpy(target, this->_savedRegions[target], sizeof(Jump));
+        memcpy(target, iterator->second, sizeof(Jump));
         this->_savedRegions.erase(iterator);
 
         if (oldMp != _MP_UNKNOWN)
@@ -103,6 +110,45 @@ namespace splicing {
 
         if (std::error_code errorCode = this->tryRestore(target))
             throw std::system_error(errorCode);
+    }
+
+
+    std::error_code Api::trySetHookUnsafe(
+            void *target, void *hook, void *backup) _NOEXCEPT {
+
+        bitfield_t oldMp;
+
+        if (setMemoryPermissions(target, sizeof(Jump), _MP_RWX, oldMp))
+            return makeErrorCode(Error::invalidAddress);
+
+        if (backup != nullptr)
+            memcpy(backup, target, sizeof(Jump));
+
+        new (target) Jump(hook);
+
+        if (oldMp != _MP_UNKNOWN)
+            setMemoryPermissions(target, sizeof(Jump), oldMp);
+
+        return makeErrorCode(Error::success);
+    }
+
+
+    std::error_code Api::tryRestoreUnsafe(
+            void *target, void *backup) _NOEXCEPT {
+
+        assert(backup != nullptr);
+
+        bitfield_t oldMp;
+
+        if (setMemoryPermissions(target, sizeof(Jump), _MP_RWX, oldMp))
+            return makeErrorCode(Error::invalidAddress);
+
+        memcpy(target, backup, sizeof(Jump));
+
+        if (oldMp != _MP_UNKNOWN)
+            setMemoryPermissions(target, sizeof(Jump), oldMp);
+
+        return makeErrorCode(Error::success);
     }
 
 

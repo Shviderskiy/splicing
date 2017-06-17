@@ -158,6 +158,21 @@ namespace splicing {
                 assert(fooPtr(10) == 11);
                 assert(splicing::api().tryRestore(fooAddr) ==
                        splicing::Error::notHookedYet);
+
+                {
+                    uint8_t buffer[sizeof(splicing::Jump)];
+                    std::error_code errorCode;
+                    errorCode =
+                            splicing::api().trySetHookUnsafe(
+                                fooAddr, barAddr, buffer);
+                    assert(errorCode == splicing::Error::success);
+                    assert(fooPtr(10) == 9);
+                    errorCode =
+                            splicing::api().tryRestoreUnsafe(
+                                fooAddr, buffer);
+                    assert(errorCode == splicing::Error::success);
+
+                }
             }
         }
 

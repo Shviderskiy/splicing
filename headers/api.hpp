@@ -23,6 +23,12 @@ namespace splicing {
 
         virtual void setHook(void *target, void *hook) = 0;
         virtual void restore(void *target) = 0;
+
+        virtual std::error_code
+        trySetHookUnsafe(void *target, void *hook,
+                         void *backup = nullptr) _NOEXCEPT = 0;
+        virtual std::error_code
+        tryRestoreUnsafe(void *target, void *backup) _NOEXCEPT = 0;
     };
 
 

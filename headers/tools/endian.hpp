@@ -111,6 +111,18 @@ namespace tools {
 
                 return SwapBytesImpl<_Integer>::call(value);
             }
+
+            template <typename _Integer>
+            _CONSTEXPR static _Integer fromLittle(_Integer const &value) {
+
+                return value;
+            }
+
+            template <typename _Integer>
+            _CONSTEXPR static _Integer fromBig(_Integer const &value) {
+
+                return SwapBytesImpl<_Integer>::call(value);
+            }
         };
 
 
@@ -125,6 +137,18 @@ namespace tools {
 
             template <typename _Integer>
             _CONSTEXPR static _Integer toBig(_Integer const &value) {
+
+                return value;
+            }
+
+            template <typename _Integer>
+            _CONSTEXPR static _Integer fromLittle(_Integer const &value) {
+
+                return SwapBytesImpl<_Integer>::call(value);
+            }
+
+            template <typename _Integer>
+            _CONSTEXPR static _Integer fromBig(_Integer const &value) {
 
                 return value;
             }
@@ -153,8 +177,8 @@ namespace tools {
     _CONSTEXPR std::bitset<_Size> swapBytes(std::bitset<_Size> const &value) {
 
         static_assert(_Size % 8 == 0, "Invalid size");
-        return
-            _hidden::SwapBytesImpl<std::bitset<_Size>, _Size / 8>::call(value);
+        return _hidden
+                ::SwapBytesImpl<std::bitset<_Size>, _Size / 8>::call(value);
     }
 
 
@@ -178,14 +202,31 @@ namespace tools {
     template <typename _Integer>
     _CONSTEXPR _Integer toLittleEndian(_Integer const &value) {
 
-        return _hidden::Converter<_hidden::Detector::current>::toLittle(value);
+        return _hidden
+                ::Converter<_hidden::Detector::current>::toLittle(value);
     }
 
 
     template <typename _Integer>
     _CONSTEXPR _Integer toBigEndian(_Integer const &value) {
 
-        return _hidden::Converter<_hidden::Detector::current>::toBig(value);
+        return _hidden
+                ::Converter<_hidden::Detector::current>::toBig(value);
+    }
+
+    template <typename _Integer>
+    _CONSTEXPR _Integer fromLittleEndian(_Integer const &value) {
+
+        return _hidden
+                ::Converter<_hidden::Detector::current>::fromLittle(value);
+    }
+
+
+    template <typename _Integer>
+    _CONSTEXPR _Integer fromBigEndian(_Integer const &value) {
+
+        return _hidden
+                ::Converter<_hidden::Detector::current>::fromBig(value);
     }
 
 } // namespace tools

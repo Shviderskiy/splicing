@@ -44,19 +44,6 @@ namespace tools {
                    uint32_t(0x44332211));
             assert(tools::swapBytes(uint64_t(0x1122334455667788)) ==
                    uint64_t(0x8877665544332211));
-
-            assert(tools::swapBytes(std::bitset<8>(0x11)) ==
-                   std::bitset<8>(0x11));
-            assert(tools::swapBytes(std::bitset<16>(0x1122)) ==
-                   std::bitset<16>(0x2211));
-            assert(tools::swapBytes(std::bitset<24>(0x112233)) ==
-                   std::bitset<24>(0x332211));
-            assert(tools::swapBytes(std::bitset<32>(0x11223344)) ==
-                   std::bitset<32>(0x44332211));
-            assert(tools::swapBytes(std::bitset<40>(0x1122334455)) ==
-                   std::bitset<40>(0x5544332211));
-            assert(tools::swapBytes(std::bitset<64>(0x1122334455667788)) ==
-                   std::bitset<64>(0x8877665544332211));
         }
 
 

@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include <bitset>
+#include <type_traits>
 
 #include "tools/c++11.hpp"
 
@@ -67,26 +67,32 @@ namespace tools {
             size_t _Size = sizeof(_Integer),
             size_t _Current = _Size / 2 + 1
         >
-        class SwapBytesImpl {
+        class SwapBytesImplementation {
+
+            static_assert(std::is_integral<_Integer>::value,
+                          "Not integral type!");
 
             static size_t const _offset1 = (_Size / 2 + 1 - _Current) * 8;
             static size_t const _offset2 = (_Size - 1) * 8 - _offset1;
 
         public:
-            _CONSTEXPR static _Integer call(_Integer const &value) {
+            _CONSTEXPR static _Integer call(_Integer value) {
 
-                return
-                    ((value >> _offset1) & _Integer(0xff)) << _offset2 |
-                    ((value >> _offset2) & _Integer(0xff)) << _offset1 |
-                    SwapBytesImpl<_Integer, _Size, _Current - 1>::call(value);
+                return ((value >> _offset1) & _Integer(0xff)) << _offset2 |
+                       ((value >> _offset2) & _Integer(0xff)) << _offset1 |
+                       SwapBytesImplementation<_Integer, _Size, _Current - 1>
+                           ::call(value);
             }
         };
 
 
         template <typename _Integer, size_t _Size>
-        struct SwapBytesImpl<_Integer, _Size, 0> {
+        struct SwapBytesImplementation<_Integer, _Size, 0> {
 
-            _CONSTEXPR static _Integer call(_Integer const &) {
+            static_assert(std::is_integral<_Integer>::value,
+                          "Not integral type!");
+
+            _CONSTEXPR static _Integer call(_Integer) {
 
                 return _Integer(0);
             }
@@ -101,27 +107,27 @@ namespace tools {
         struct Converter<Endian::little> {
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer toLittle(_Integer const &value) {
+            _CONSTEXPR static _Integer toLittle(_Integer value) {
 
                 return value;
             }
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer toBig(_Integer const &value) {
+            _CONSTEXPR static _Integer toBig(_Integer value) {
 
-                return SwapBytesImpl<_Integer>::call(value);
+                return SwapBytesImplementation<_Integer>::call(value);
             }
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer fromLittle(_Integer const &value) {
+            _CONSTEXPR static _Integer fromLittle(_Integer value) {
 
                 return value;
             }
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer fromBig(_Integer const &value) {
+            _CONSTEXPR static _Integer fromBig(_Integer value) {
 
-                return SwapBytesImpl<_Integer>::call(value);
+                return SwapBytesImplementation<_Integer>::call(value);
             }
         };
 
@@ -130,25 +136,25 @@ namespace tools {
         struct Converter<Endian::big> {
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer toLittle(_Integer const &value) {
+            _CONSTEXPR static _Integer toLittle(_Integer value) {
 
-                return SwapBytesImpl<_Integer>::call(value);
+                return SwapBytesImplementation<_Integer>::call(value);
             }
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer toBig(_Integer const &value) {
+            _CONSTEXPR static _Integer toBig(_Integer value) {
 
                 return value;
             }
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer fromLittle(_Integer const &value) {
+            _CONSTEXPR static _Integer fromLittle(_Integer value) {
 
-                return SwapBytesImpl<_Integer>::call(value);
+                return SwapBytesImplementation<_Integer>::call(value);
             }
 
             template <typename _Integer>
-            _CONSTEXPR static _Integer fromBig(_Integer const &value) {
+            _CONSTEXPR static _Integer fromBig(_Integer value) {
 
                 return value;
             }
@@ -167,18 +173,9 @@ namespace tools {
 
 
     template <typename _Integer>
-    _CONSTEXPR _Integer swapBytes(_Integer const &value) {
+    _CONSTEXPR _Integer swapBytes(_Integer value) {
 
-        return _hidden::SwapBytesImpl<_Integer>::call(value);
-    }
-
-
-    template <size_t _Size>
-    _CONSTEXPR std::bitset<_Size> swapBytes(std::bitset<_Size> const &value) {
-
-        static_assert(_Size % 8 == 0, "Invalid size");
-        return _hidden
-                ::SwapBytesImpl<std::bitset<_Size>, _Size / 8>::call(value);
+        return _hidden::SwapBytesImplementation<_Integer>::call(value);
     }
 
 
@@ -200,7 +197,7 @@ namespace tools {
 
 
     template <typename _Integer>
-    _CONSTEXPR _Integer toLittleEndian(_Integer const &value) {
+    _CONSTEXPR _Integer toLittleEndian(_Integer value) {
 
         return _hidden
                 ::Converter<_hidden::Detector::current>::toLittle(value);
@@ -208,14 +205,14 @@ namespace tools {
 
 
     template <typename _Integer>
-    _CONSTEXPR _Integer toBigEndian(_Integer const &value) {
+    _CONSTEXPR _Integer toBigEndian(_Integer value) {
 
         return _hidden
                 ::Converter<_hidden::Detector::current>::toBig(value);
     }
 
     template <typename _Integer>
-    _CONSTEXPR _Integer fromLittleEndian(_Integer const &value) {
+    _CONSTEXPR _Integer fromLittleEndian(_Integer value) {
 
         return _hidden
                 ::Converter<_hidden::Detector::current>::fromLittle(value);
@@ -223,7 +220,7 @@ namespace tools {
 
 
     template <typename _Integer>
-    _CONSTEXPR _Integer fromBigEndian(_Integer const &value) {
+    _CONSTEXPR _Integer fromBigEndian(_Integer value) {
 
         return _hidden
                 ::Converter<_hidden::Detector::current>::fromBig(value);

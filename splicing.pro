@@ -10,15 +10,15 @@ QMAKE_LFLAGS += -static
 INCLUDEPATH += headers
 
 HEADERS += \
-    tools/endian.hpp \
-    api.hpp \
+    tools/c++11.hpp \
     tools/keywords_override_protection.hpp \
+    tools/endian.hpp \
+    tools/spin_lock.hpp \
+    tools/static_initialization.hpp \
+    api.hpp \
     jump.hpp \
     memory_permissions.hpp \
-    tools/c++11.hpp \
-    errors.hpp \
-    tools/spin_lock.hpp \
-    tools/static_initialization.hpp
+    errors.hpp
 
 SOURCES += \
     api.cpp \

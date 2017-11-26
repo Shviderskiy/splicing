@@ -126,8 +126,8 @@
 Установку хука для функции `free` следует производить следующим образом.
 
 	splicing::api().trySetHookUnsafe(
-    		reinterpret_cast<void*>(free),
-            reinterpret_cast<void*>(freeHook),
+	        reinterpret_cast<void*>(free),
+	        reinterpret_cast<void*>(freeHook),
             freeSavedRegion);
 
 Необходимость в использовании `unsafe` метода обусловлена тем, что не `unsafe` методы в своей реализации неявно совершают вызовы `malloc & free`.

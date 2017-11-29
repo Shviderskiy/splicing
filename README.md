@@ -46,9 +46,9 @@
 
 	int bar(int param) {
 
-    	printf("-> bar [executable]\n");
-    	printf("   param =  %d\n", param);
-    	return param + 1;
+        printf("-> bar [executable]\n");
+        printf("   param =  %d\n", param);
+        return param + 1;
 	}
 
 Создадим исполняемый файл `foo`

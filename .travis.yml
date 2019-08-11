@@ -15,7 +15,7 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get install -qq g++-4.8 g++-4.8-multilib
+  - sudo apt-get install -qq g++-4.8 g++-4.8-multilib linux-libc-dev linux-libc-dev:i386
 
 before_script:
   - cd tests

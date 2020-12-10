@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <mutex>
 
@@ -94,6 +95,8 @@ namespace splicing {
         int foo(int param);
         int bar(int param);
 
+        void* fakeMalloc(size_t size);
+
 
         void api() {
 
@@ -123,6 +126,16 @@ namespace splicing {
                        splicing::Error::success);
                 assert(memcmp(buffer, &jump, sizeof(splicing::Jump)) != 0);
 
+            }
+            {
+                void *mallocAddr = voidPtr(malloc);
+                void *fakeMallocAddr = voidPtr(fakeMalloc);
+
+                assert(splicing::api().trySetHook(mallocAddr, fakeMallocAddr) ==
+                       splicing::Error::success);
+                assert(malloc(10) == reinterpret_cast<void*>(10));
+                assert(splicing::api().tryRestore(mallocAddr) ==
+                       splicing::Error::success);
             }
             {
                 int(*volatile fooPtr)(int) = foo;
@@ -190,6 +203,11 @@ namespace splicing {
         int bar(int param) {
 
             return param - 1;
+        }
+
+        void* fakeMalloc(size_t size)
+        {
+            return reinterpret_cast<void*>(size);
         }
 
     } // namespace tests

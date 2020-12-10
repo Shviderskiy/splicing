@@ -23,7 +23,7 @@ namespace tools {
 
 
 #define _STATIC_INITIALIZATION_BLOCK \
-    static tools::StaticInitializer<__COUNTER__> _UNIQUE_NAME = [&]
+    static tools::StaticInitializer<__COUNTER__> _UNIQUE_NAME = []
 
 
 #endif // _TOOLS_INITIALIZATION_HPP

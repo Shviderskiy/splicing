@@ -131,10 +131,12 @@ namespace splicing {
                 void *mallocAddr = voidPtr(malloc);
                 void *fakeMallocAddr = voidPtr(fakeMalloc);
 
-                assert(splicing::api().trySetHook(mallocAddr, fakeMallocAddr) ==
+                uint8_t backup[sizeof(splicing::Jump)];
+                assert(splicing::api().trySetHookUnsafe(
+                           mallocAddr, fakeMallocAddr, backup) ==
                        splicing::Error::success);
                 assert(malloc(10) == reinterpret_cast<void*>(10));
-                assert(splicing::api().tryRestore(mallocAddr) ==
+                assert(splicing::api().tryRestoreUnsafe(mallocAddr, backup) ==
                        splicing::Error::success);
             }
             {

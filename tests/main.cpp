@@ -135,9 +135,17 @@ namespace splicing {
                 assert(splicing::api().trySetHookUnsafe(
                            mallocAddr, fakeMallocAddr, backup) ==
                        splicing::Error::success);
-                assert(malloc(10) == reinterpret_cast<void*>(10));
+
+                union
+                {
+                    void *result;
+                    volatile uintptr_t value;
+                };
+                result = malloc(10);
                 assert(splicing::api().tryRestoreUnsafe(mallocAddr, backup) ==
                        splicing::Error::success);
+
+                assert(value == 10);
             }
             {
                 int(*volatile fooPtr)(int) = foo;

@@ -21,8 +21,7 @@ namespace splicing {
 
         void *page = reinterpret_cast<void*>(
             uintptr_t(address) & ~(sysconf(_SC_PAGESIZE) - 1));
-        size += static_cast<uint8_t *>(address) -
-                static_cast<uint8_t *>(page);
+        size += uintptr_t(address) - uintptr_t(page);
         return mprotect(page, size, mp) == 0
             ? std::error_code(0, std::system_category())
             : std::error_code(errno, std::system_category());

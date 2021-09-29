@@ -21,9 +21,14 @@ before_script:
   - cd tests
 
 script:
-  - COMPILER=g++-4.8 CONFIGURATION=release ARCHITECTURE=amd64 make
-  - ./tests
-  - make clean
-  - COMPILER=g++-4.8 CONFIGURATION=release ARCHITECTURE=x86 make
-  - ./tests
-  - make clean
+  - mkdir build_x64
+  - cd build_x64
+  - CXX=g++-4.8 CXXFLAGS=-m64 cmake .. -DCMAKE_BUILD_TYPE=Release
+  - cmake --build . --verbose
+  - ctest --output-on-failure
+  - cd ..
+  - mkdir build_x32
+  - cd build_x32
+  - CXX=g++-4.8 CXXFLAGS=-m32 cmake .. -DCMAKE_BUILD_TYPE=Release
+  - cmake --build . --verbose
+  - ctest --output-on-failure
